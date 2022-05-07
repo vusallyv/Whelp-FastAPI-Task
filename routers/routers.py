@@ -80,8 +80,8 @@ def task(Authorize: AuthJWT = Depends()):
     try:
         Authorize.jwt_required()
         current_user = Authorize.get_jwt_subject()
-        task = create_task(current_user)
-        return {"task": task}
+        task = create_task.delay(current_user)
+        return {"task_id": task.id}
     except Exception:
         raise HTTPException(status_code=500, detail="Task failed to create")
 
